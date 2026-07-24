@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from tasks.models import Task
-from tasks.forms import TaskForm
+from tasks.forms import TaskCreationForm, TaskUpdateForm
 
 # Create your views here.
 
@@ -13,10 +13,11 @@ def task_list_view(request):
     context = {'tasks': tasks}
     return render(request, 'tasks/task_list.html', context)
 
+
 @login_required
 def task_create_view(request):
     if request.method == 'POST':
-        form = TaskForm(request.POST)
+        form = TaskCreationForm(request.POST)
 
         if form.is_valid():
             task = form.save(commit=False)
@@ -29,7 +30,41 @@ def task_create_view(request):
         messages.error(request, 'Invalid Task.')
 
     else:
-        form = TaskForm()
+        form = TaskCreationForm()
 
-    context = {'form': form}
+    context = {'form': form, 'title': 'Create Task'}
     return render(request, 'tasks/task_form.html', context)
+
+
+@login_required
+def task_update_view(request, pk: int):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+
+    if request.method == 'POST':
+        form = TaskUpdateForm(request.POST, instance=task)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Task saved.')
+            return redirect('tasks:task-list')
+
+        messages.error(request, 'Invalid Task.')
+
+    else:
+        form = TaskUpdateForm()
+
+    context = {'form': form, 'title': 'Update Task'}
+    return render(request, 'tasks/task_form.html', context)
+
+
+@login_required
+def task_delete_view(request, pk):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+
+    if request.method == 'POST':
+        task.delete()
+        messages.success(request, 'Task deleted successfully.')
+        return redirect('tasks:task-list')
+
+    context = {'task': task}
+    return render(request, 'tasks/task_confirm_delete.html', context)

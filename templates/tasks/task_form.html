@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Task</title>
-</head>
-<body>
-    
-    <h1>Create Task</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-    <form method="post">
-        {% csrf_token %}
+<h1>{{ title }}</h1>
 
-        {{ form.as_p }}
+<form method="post">
+    {% csrf_token %}
 
-        <button type="submit">Create Task</button>
-    </form>
+    {{ form.as_p }}
 
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
+    <button type="submit">{{ title }}</button>
+</form>
 
-</body>
-</html>
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+
+{% endblock %}

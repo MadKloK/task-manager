@@ -1,19 +1,26 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
-</head>
-<body>
-    <h1>Tasks List</h1>
-    
-    <ul>
-        {% for task in tasks %}
-        <li>{{ task.title }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+<h1>Tasks List</h1>
+
+<a href="{% url 'tasks:task-create' %}">Create Task</a>
+
+<ul>
+    {% for task in tasks %}
+    <li>
+        {{ task.title }}
+        
+        {% if task.completed %}
+        <span> ✔ </span>
+        {% else %}
+        <span> ✘ </span>
+        {% endif %}
+
+        <a href="{% url 'tasks:task-update' pk=task.pk %}">[edit]</a>
+        <a href="{% url 'tasks:task-delete' pk=task.pk %}">[delete]</a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
