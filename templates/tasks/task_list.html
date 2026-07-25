@@ -2,25 +2,49 @@
 {% load static %}
 {% block content %}
 
-<h1>Tasks List</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Tasks List</h1>
 
-<a href="{% url 'tasks:task-create' %}">Create Task</a>
+    <a href="{% url 'tasks:task-create' %}" class="btn btn-primary">
+        Create Task
+    </a>
+</div>
 
-<ul>
+<div class="list-group">
     {% for task in tasks %}
-    <li>
-        {{ task.title }}
+
+    <div class="list-group-item d-flex justify-content-between align-items-center">
         
+        <div>
+            {{ task.title }}
+        </div>
+
         {% if task.completed %}
-        <span> ✔ </span>
+        <span class="badge text-bg-success me-2">
+            Completed
+        </span>
         {% else %}
-        <span> ✘ </span>
+        <span class="badge text-bg-secondary me-2">
+            Pending
+        </span>
         {% endif %}
 
-        <a href="{% url 'tasks:task-update' pk=task.pk %}">[edit]</a>
-        <a href="{% url 'tasks:task-delete' pk=task.pk %}">[delete]</a>
-    </li>
+        <a href="{% url 'tasks:task-update' pk=task.pk %}" class="btn btn-sm btn-outline-primary me-2">
+            Edit
+        </a>
+
+        <a href="{% url 'tasks:task-delete' pk=task.pk %}" class="btn btn-sm btn-outline-danger me-2">
+            Delete
+        </a>
+    </div>
+
+    {% empty %}
+    
+        <div class="list-group-item">
+            No tasks yet.
+        </div>
+    
     {% endfor %}
-</ul>
+</div>
 
 {% endblock %}

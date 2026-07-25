@@ -8,11 +8,15 @@
 
 <form method="post">
     {% csrf_token %}
-    <button type="submit">Delete</button>
+    
+    <button type="submit" class="btn btn-danger">
+        Delete
+    </button>
+    
+    <a href="{% url 'tasks:task-list' %}" class="btn btn-secondary">
+       Cancel
+    </a>
 </form>
 
-<a href="{% url 'tasks:task-list' %}">
-    Cancel
-</a>
 
 {% endblock %}

@@ -7,13 +7,17 @@
 <form method="post">
     {% csrf_token %}
 
-    {{ form.as_p }}
+    <div class="card mb-3">
+        <div class="card-body">
 
-    <button type="submit">{{ title }}</button>
+            {{ form.as_p }}
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {{ title }}
+    </button>
 </form>
-
-{% for message in messages %}
-    <p>{{ message }}</p>
-{% endfor %}
 
 {% endblock %}
