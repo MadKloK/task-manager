@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'tasks.apps.TasksConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
