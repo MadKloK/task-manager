@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Please Sign in</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="card mb-3">
+        <div class="card-body">
+
+            {{ form.as_p }}
+
+        </div>
+    </div>
+
+    <p>
+        Don't have an account?
+        <a href="{% url 'accounts:register' %}">
+            Register
+        </a>
+    </p>
+
+    <button type="submit" class="btn btn-primary">
+        Sign in
+    </button>
+
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+</form>
+
+{% endblock %}

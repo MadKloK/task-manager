@@ -3,9 +3,14 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Tasks List</h1>
+    <div>
+        <h1 class="mb-0">Tasks List</h1>
+        <small class="text-muted">
+            {{ tasks.count }} task{{ tasks.count|pluralize }}
+        </small>
+    </div>
 
-    <a href="{% url 'tasks:task-create' %}" class="btn btn-primary">
+    <a class="btn btn-primary">
         Create Task
     </a>
 </div>
@@ -14,34 +19,47 @@
     {% for task in tasks %}
 
     <div class="list-group-item d-flex justify-content-between align-items-center">
-        
+
         <div>
-            {{ task.title }}
+            <strong>{{ task.title }}</strong>
+
+            {% if task.description %}
+            <div class="text-muted small">
+                {{ task.description|truncatechars:80 }}
+            </div>
+            {% endif %}
         </div>
 
-        {% if task.completed %}
-        <span class="badge text-bg-success me-2">
-            Completed
-        </span>
-        {% else %}
-        <span class="badge text-bg-secondary me-2">
-            Pending
-        </span>
-        {% endif %}
+        <div class="d-flex align-items-center">
 
-        <a href="{% url 'tasks:task-update' pk=task.pk %}" class="btn btn-sm btn-outline-primary me-2">
-            Edit
-        </a>
+            {% if task.completed %}
+            <span class="badge text-bg-success me-2">
+                Completed
+            </span>
+            {% else %}
+            <span class="badge text-bg-secondary me-2">
+                Pending
+            </span>
+            {% endif %}
 
-        <a href="{% url 'tasks:task-delete' pk=task.pk %}" class="btn btn-sm btn-outline-danger me-2">
-            Delete
-        </a>
+            <a href="{% url 'tasks:task-update' pk=task.pk %}"
+            class="btn btn-sm btn-outline-primary me-2">
+                Edit
+            </a>
+
+            <a href="{% url 'tasks:task-delete' pk=task.pk %}"
+            class="btn btn-sm btn-outline-danger">
+                Delete
+            </a>
+
+        </div>
+
     </div>
 
     {% empty %}
     
-        <div class="list-group-item">
-            No tasks yet.
+        <div class="alert alert-info">
+            You don't have any tasks yet. Create your first task to get started.
         </div>
     
     {% endfor %}
