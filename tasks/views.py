@@ -32,7 +32,7 @@ def task_create_view(request):
     else:
         form = TaskCreationForm()
 
-    context = {'form': form, 'title': 'Create Task'}
+    context = {'form': form, 'title': 'Create task'}
     return render(request, 'tasks/task_form.html', context)
 
 
@@ -51,9 +51,9 @@ def task_update_view(request, pk: int):
         messages.error(request, 'Invalid Task.')
 
     else:
-        form = TaskUpdateForm()
+        form = TaskUpdateForm(instance=task)
 
-    context = {'form': form, 'title': 'Update Task'}
+    context = {'form': form, 'title': 'Update task'}
     return render(request, 'tasks/task_form.html', context)
 
 
