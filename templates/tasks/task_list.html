@@ -1,68 +1,254 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
+
     <div>
         <h1 class="mb-0">Tasks List</h1>
+
         <small class="text-muted">
-            {{ tasks.count }} task{{ tasks.count|pluralize }}
+            {{ tasks.paginator.count }} task{{ tasks.paginator.count|pluralize }}
         </small>
     </div>
 
-    <a class="btn btn-primary">
+
+    <a href="{% url 'tasks:task-create' %}" class="btn btn-primary">
         Create Task
     </a>
+
 </div>
 
+
+<!-- Filters -->
+
+<form method="get" class="row g-2 mb-4">
+
+    <div class="col-md-4">
+        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search tasks...">
+    </div>
+
+
+    <div class="col-md-3">
+
+        <select name="status" class="form-select">
+
+            <option value="">
+                All Statuses
+            </option>
+
+            <option value="todo" {% if request.GET.status == 'todo' %}selected{% endif %}>
+                To Do
+            </option>
+
+            <option value="doing" {% if request.GET.status == "doing" %}selected{% endif %}>
+                In Progress
+            </option>
+
+            <option value="done" {% if request.GET.status == "done" %}selected{% endif %}>
+                Done
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <select name="priority" class="form-select">
+
+            <option value="">
+                All Priorities
+            </option>
+
+            <option value="high" {% if request.GET.priority == "high" %}selected{% endif %}>
+                High
+            </option>
+
+            <option value="medium" {% if request.GET.priority == "medium" %}selected{% endif %}>
+                Medium
+            </option>
+
+            <option value="low" {% if request.GET.priority == "low" %}selected{% endif %}>
+                Low
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="col-md-2">
+
+        <button class="btn btn-primary w-100">
+            Filter
+        </button>
+
+    </div>
+
+</form>
+
+
+
+<!-- Tasks -->
+
 <div class="list-group">
+
     {% for task in tasks %}
 
     <div class="list-group-item d-flex justify-content-between align-items-center">
 
+
         <div>
-            <strong>{{ task.title }}</strong>
+
+            {% if task.status == "done" %}
+
+            <strong class="text-decoration-line-through text-muted">
+                {{ task.title }}
+            </strong>
+
+            {% else %}
+
+            <strong>
+                {{ task.title }}
+            </strong>
+
+            {% endif %}
+
 
             {% if task.description %}
+
             <div class="text-muted small">
                 {{ task.description|truncatechars:80 }}
             </div>
+
             {% endif %}
+
+
+            {% if task.due_date %}
+
+            <div class="small text-muted">
+                Due: {{ task.due_date }}
+            </div>
+
+            {% endif %}
+
         </div>
+
+
 
         <div class="d-flex align-items-center">
 
-            {% if task.completed %}
-            <span class="badge text-bg-success me-2">
-                Completed
+
+            {% if task.priority == "high" %}
+
+            <span class="badge text-bg-danger me-2">
+                High
             </span>
+
+            {% elif task.priority == "medium" %}
+
+            <span class="badge text-bg-warning me-2">
+                Medium
+            </span>
+
             {% else %}
-            <span class="badge text-bg-secondary me-2">
-                Pending
+
+            <span class="badge text-bg-info me-2">
+                Low
             </span>
+
             {% endif %}
 
-            <a href="{% url 'tasks:task-update' pk=task.pk %}"
-            class="btn btn-sm btn-outline-primary me-2">
+
+
+            <a href="{% url 'tasks:task-update' pk=task.pk %}" class="btn btn-sm btn-outline-primary me-2">
                 Edit
             </a>
 
-            <a href="{% url 'tasks:task-delete' pk=task.pk %}"
-            class="btn btn-sm btn-outline-danger">
+
+            <a href="{% url 'tasks:task-delete' pk=task.pk %}" class="btn btn-sm btn-outline-danger">
                 Delete
             </a>
 
+
         </div>
+
 
     </div>
 
+
     {% empty %}
-    
-        <div class="alert alert-info">
-            You don't have any tasks yet. Create your first task to get started.
-        </div>
-    
+
+    <div class="alert alert-info">
+        No tasks found.
+    </div>
+
     {% endfor %}
+
 </div>
+
+
+
+<!-- Pagination -->
+
+{% if tasks.has_other_pages %}
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+
+        {% if tasks.has_previous %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+                href="?page={{ tasks.previous_page_number }}{% if query_params %}&{{ query_params }}{% endif %}">
+                Previous
+            </a>
+
+        </li>
+
+        {% endif %}
+
+
+
+        {% for num in tasks.paginator.page_range %}
+
+        <li class="page-item {% if tasks.number == num %}active{% endif %}">
+
+            <a class="page-link" href="?page={{ num }}{% if query_params %}&{{ query_params }}{% endif %}">
+                {{ num }}
+            </a>
+
+        </li>
+
+        {% endfor %}
+
+
+
+        {% if tasks.has_next %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+                href="?page={{ tasks.next_page_number }}{% if query_params %}&{{ query_params }}{% endif %}">
+                Next
+            </a>
+
+        </li>
+
+        {% endif %}
+
+
+    </ul>
+
+</nav>
+
+{% endif %}
+
 
 {% endblock %}
