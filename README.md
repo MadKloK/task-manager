@@ -1,26 +1,77 @@
 # Django Task Manager
 
-A simple task management web application built with Django.
+A task management web application built with Django.
+
+This project was created to practice Django development concepts such as authentication, CRUD operations, database design, testing, Docker, and PostgreSQL integration.
 
 ## Features
 
-* Create tasks
-* Edit tasks
-* Delete tasks
-* Mark tasks as completed
-* User authentication (planned)
+* User registration and authentication
+* Create, update, and delete tasks
+* Task priorities and statuses
+* Due dates
+* Search and filtering
+* Pagination
+* PostgreSQL support
+* Dockerized deployment
+* Automated tests with GitHub Actions
 
-## Technologies
+## Tech Stack
 
 * Python
 * Django
-* SQLite (initially)
-* Bootstrap
+* PostgreSQL
+* Bootstrap 5
+* Docker
+* Gunicorn
 
-## Goals
+## Installation
 
-This project is being built to practice Django development, database modeling, CRUD operations, authentication, and deployment.
+Clone the repository:
 
-## Status
+```bash
+git clone https://github.com/MadKloK/task-manager.git
+cd task-manager
+```
 
-In development.
+Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Apply migrations:
+
+```bash
+python manage.py migrate
+```
+
+Run the development server:
+
+```bash
+python manage.py runserver
+```
+
+## Running Tests
+
+```bash
+python manage.py test
+```
+
+## Future Improvements
+
+* Task categories and tags
+* REST API with Django REST Framework
+* Email notifications
+* Team collaboration features
+
+## License
+
+This project is open source and available under the MIT License.
