@@ -30,9 +30,13 @@ def login_view(request):
 
 @login_required
 def logout_view(request):
-    if request.method == 'POST':
-        logout(request)
-    return redirect('tasks:task-list')
+    if request.method != "POST":
+        return redirect("tasks:task-list")
+
+    logout(request)
+    messages.success(request, "Logged out successfully.")
+
+    return redirect("accounts:login")
 
 def register_view(request):
     if request.user.is_authenticated:
