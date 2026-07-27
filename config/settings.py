@@ -30,6 +30,10 @@ DEBUG = config(
     cast=bool
 )
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://task-manager-3tte.onrender.com"
+]
+
 if not DEBUG:
 
     SECURE_SSL_REDIRECT = True
@@ -37,7 +41,6 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
 
     CSRF_COOKIE_SECURE = True
-
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
